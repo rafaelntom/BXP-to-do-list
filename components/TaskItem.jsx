@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import "../global.css";
+import { Link } from "expo-router";
 
 const TaskItem = ({ item, onEdit, onDelete, onComplete }) => {
   return (
@@ -19,7 +20,9 @@ const TaskItem = ({ item, onEdit, onDelete, onComplete }) => {
           <Ionicons name="checkmark" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={onEdit}>
-          <Ionicons name="pencil" size={24} color="white" />
+          <Link href={`/edit/${item.id}`}>
+            <Ionicons name="pencil" size={24} color="white" />
+          </Link>
         </TouchableOpacity>
         <TouchableOpacity onPress={onDelete}>
           <Ionicons name="trash" size={24} color="white" />
