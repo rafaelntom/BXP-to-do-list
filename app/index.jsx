@@ -9,7 +9,14 @@ import {
 } from "react-native";
 import TaskItem from "../components/TaskItem";
 import "../global.css";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  addTask,
+  editTask,
+  getData,
+  removeTask,
+  storeData,
+  toggleTaskDone,
+} from "../utils/utils";
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
@@ -19,6 +26,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const loadTasks = async () => {
       const savedTasks = await getData();
+      console.log(savedTasks);
 
       if (savedTasks) {
         setTasks(savedTasks);
@@ -33,32 +41,10 @@ const HomeScreen = () => {
     storeData(tasks);
   }, [tasks]);
 
-  const addTask = () => {
-    if (inputText.trim() === "") return;
-    const newTasks = [
-      { id: (tasks.length + 1).toString(), text: inputText, isDone: false },
-      ...tasks,
-    ];
+  const handleAddTask = async () => {
+    const newTasks = await addTask(tasks, inputText);
     setTasks(newTasks);
     setInputText("");
-  };
-
-  const storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("@tasks", jsonValue);
-    } catch (error) {
-      console.error("Error storing tasks:", error);
-    }
-  };
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("@tasks");
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
-    } catch (e) {
-      console.error("Error reading tasks:", error);
-    }
   };
 
   return (
@@ -80,7 +66,7 @@ const HomeScreen = () => {
         ></TextInput>
         <TouchableOpacity
           className="bg-pj-steel-blue p-4 rounded-lg items-center"
-          onPress={addTask}
+          onPress={handleAddTask}
         >
           <Text className="text-pj-silver text-lg font-bold">Add Task</Text>
         </TouchableOpacity>
