@@ -9,14 +9,8 @@ import {
 } from "react-native";
 import TaskItem from "../components/TaskItem";
 import "../global.css";
-import {
-  addTask,
-  editTask,
-  getData,
-  removeTask,
-  storeData,
-  toggleTaskDone,
-} from "../utils/utils";
+import { addTask, getData, storeData } from "../utils/utils";
+import "../global.css";
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
@@ -47,6 +41,11 @@ const HomeScreen = () => {
     setInputText("");
   };
 
+  const handleStatusChange = async () => {
+    const updatedTasks = await getData();
+    setTasks(updatedTasks);
+  };
+
   return (
     <View className="flex-1 bg-pj-raisin-black p-4">
       <StatusBar backgroundColor="hsla(236, 18%, 19%, 1)" />
@@ -74,7 +73,13 @@ const HomeScreen = () => {
 
       <FlatList
         data={tasks}
-        renderItem={({ item }) => <TaskItem item={item} />}
+        renderItem={({ item }) => (
+          <TaskItem
+            item={item}
+            onStatusChange={handleStatusChange}
+            onTaskDeletion={handleStatusChange}
+          />
+        )}
         keyExtractor={(item) => item.id}
         className="flex flex-col gap-2"
       />

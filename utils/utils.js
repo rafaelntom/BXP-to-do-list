@@ -48,19 +48,29 @@ const editTask = async (tasks, taskId, newText) => {
   return updatedTasks;
 };
 
-const removeTask = async (tasks, taskId) => {
+const removeTask = async (taskId) => {
+  const tasks = await getData();
   const updatedTasks = tasks.filter((task) => task.id !== taskId);
   await storeData(updatedTasks);
   return updatedTasks;
 };
 
-const toggleTaskDone = async (tasks, taskId) => {
-  console.log(taskId);
-  const updatedTasks = tasks.map((task) =>
-    task.id === taskId ? { ...task, isDone: !task.isDone } : task
-  );
-  await storeData(updatedTasks);
-  return updatedTasks;
+const changeTaskStatus = async (taskId) => {
+  try {
+    const tasks = await getData();
+
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return { ...task, isDone: !task.isDone };
+      } else {
+        return task;
+      }
+    });
+
+    await storeData(updatedTasks);
+  } catch (error) {
+    console.log(`Error while updating the task:`, error);
+  }
 };
 
 export {
@@ -68,7 +78,7 @@ export {
   getData,
   editTask,
   removeTask,
-  toggleTaskDone,
+  changeTaskStatus,
   addTask,
   getTaskById,
 };
