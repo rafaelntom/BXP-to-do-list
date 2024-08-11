@@ -17,7 +17,7 @@ const SingleTaskScreen = () => {
   const [loading, setLoading] = useState(true);
   const [currentTask, setCurrentTask] = useState({});
 
-  let toast = useEffect(() => {
+  useEffect(() => {
     const fetchCurrentTask = async () => {
       try {
         const tasks = await getData();
