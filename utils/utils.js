@@ -18,16 +18,6 @@ const getData = async () => {
   }
 };
 
-const getTaskById = async (taskId) => {
-  try {
-    const tasks = await getData();
-    const task = tasks.find((t) => t.id === taskId);
-    return task;
-  } catch (error) {
-    console.error("Error getting task by ID:", error);
-  }
-};
-
 const addTask = async (tasks, inputText) => {
   if (inputText.trim() === "") return tasks;
 
@@ -40,7 +30,8 @@ const addTask = async (tasks, inputText) => {
   return newTasks;
 };
 
-const editTask = async (tasks, taskId, newText) => {
+const editTask = async (taskId, newText) => {
+  const tasks = await getData();
   const updatedTasks = tasks.map((task) =>
     task.id === taskId ? { ...task, text: newText } : task
   );
@@ -73,12 +64,4 @@ const changeTaskStatus = async (taskId) => {
   }
 };
 
-export {
-  storeData,
-  getData,
-  editTask,
-  removeTask,
-  changeTaskStatus,
-  addTask,
-  getTaskById,
-};
+export { storeData, getData, editTask, removeTask, changeTaskStatus, addTask };

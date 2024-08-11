@@ -24,7 +24,7 @@ const TaskItem = ({ item, onStatusChange, onTaskDeletion }) => {
     >
       <Text
         className="text-white font-bold text-xl flex-grow pr-4"
-        numberOfLines={3}
+        numberOfLines={4}
         ellipsizeMode="tail"
         style={{ flex: 3 }}
       >

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   Text,
@@ -11,12 +11,13 @@ import TaskItem from "../components/TaskItem";
 import "../global.css";
 import { addTask, getData, storeData } from "../utils/utils";
 import "../global.css";
+import { useFocusEffect } from "@react-navigation/native";
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
   const [inputText, setInputText] = useState("");
 
-  // Load tasks when the page is loaded
+  //* Load tasks when the page is loaded
   useEffect(() => {
     const loadTasks = async () => {
       const savedTasks = await getData();
@@ -30,7 +31,20 @@ const HomeScreen = () => {
     loadTasks();
   }, []);
 
-  // Making sure that the saved tasks are being updated everytime we change the state of the "tasks"
+  //* This hook is used to make something happen when the current screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      const reloadTasks = async () => {
+        const savedTasks = await getData();
+        if (savedTasks) {
+          setTasks(savedTasks);
+        }
+      };
+      reloadTasks();
+    }, [])
+  );
+
+  //* Making sure that the saved tasks are being updated everytime we change the state of the "tasks"
   useEffect(() => {
     storeData(tasks);
   }, [tasks]);
@@ -62,6 +76,7 @@ const HomeScreen = () => {
           value={inputText}
           onChangeText={setInputText}
           style={{ flex: 4 }}
+          onSubmitEditing={handleAddTask}
         ></TextInput>
         <TouchableOpacity
           className="bg-pj-steel-blue p-4 rounded-lg items-center"
