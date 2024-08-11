@@ -10,7 +10,6 @@ import {
 import TaskItem from "../components/TaskItem";
 import "../global.css";
 import { addTask, getData, storeData } from "../utils/utils";
-import "../global.css";
 import { useFocusEffect } from "@react-navigation/native";
 
 const HomeScreen = () => {

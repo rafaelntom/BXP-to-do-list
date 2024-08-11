@@ -9,13 +9,15 @@ import {
   View,
 } from "react-native";
 import { editTask, getData } from "../../utils/utils";
+import { RootSiblingParent } from "react-native-root-siblings";
+import Toast from "react-native-root-toast";
 
 const SingleTaskScreen = () => {
   const { taskId } = useLocalSearchParams();
   const [loading, setLoading] = useState(true);
   const [currentTask, setCurrentTask] = useState({});
 
-  useEffect(() => {
+  let toast = useEffect(() => {
     const fetchCurrentTask = async () => {
       try {
         const tasks = await getData();
@@ -38,6 +40,12 @@ const SingleTaskScreen = () => {
     try {
       setLoading(true);
       await editTask(taskId, currentTask.text);
+      setTimeout(() => {
+        Toast.show("Task sucessfully edited!", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.TOP,
+        });
+      }, 150);
     } catch (error) {
       console.log("Error while updating the task", error);
     } finally {
@@ -50,24 +58,26 @@ const SingleTaskScreen = () => {
       <ActivityIndicator size="large" color="#dad740" />
     </View>
   ) : (
-    <View className="bg-pj-raisin-black h-screen text-white flex flex-col items-center pt-5 px-4">
-      <Text className="self-start pl-2 text-white font-bold text-xl">
-        Edit Task:
-      </Text>
-      <TextInput
-        className="bg-neutral-900  text-white my-4 rounded-xl  placeholder:text-pj-silver text-2xl font-bold p-4 min-w-full"
-        multiline
-        value={currentTask.text}
-        onChangeText={(text) => setCurrentTask((prev) => ({ ...prev, text }))}
-        placeholder="Edit your task"
-      />
-      <TouchableOpacity
-        className="bg-pj-steel-blue p-4 rounded-lg items-center w-full"
-        onPress={handleTaskUpdate}
-      >
-        <Text className="text-pj-silver text-lg font-bold">Save Changes</Text>
-      </TouchableOpacity>
-    </View>
+    <RootSiblingParent>
+      <View className="bg-pj-raisin-black h-screen text-white flex flex-col items-center pt-5 px-4">
+        <Text className="self-start pl-2 text-white font-bold text-xl">
+          Edit Task:
+        </Text>
+        <TextInput
+          className="bg-neutral-900  text-white my-4 rounded-xl  placeholder:text-pj-silver text-2xl font-bold p-4 min-w-full"
+          multiline
+          value={currentTask.text}
+          onChangeText={(text) => setCurrentTask((prev) => ({ ...prev, text }))}
+          placeholder="Edit your task"
+        />
+        <TouchableOpacity
+          className="bg-pj-steel-blue p-4 rounded-lg items-center w-full"
+          onPress={handleTaskUpdate}
+        >
+          <Text className="text-pj-silver text-lg font-bold">Save Changes</Text>
+        </TouchableOpacity>
+      </View>
+    </RootSiblingParent>
   );
 };
 

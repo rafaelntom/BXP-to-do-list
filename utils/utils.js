@@ -33,7 +33,7 @@ const addTask = async (tasks, inputText) => {
 const editTask = async (taskId, newText) => {
   const tasks = await getData();
   const updatedTasks = tasks.map((task) =>
-    task.id === taskId ? { ...task, text: newText } : task
+    task.id === taskId ? { ...task, text: newText.trim() } : task
   );
   await storeData(updatedTasks);
   return updatedTasks;
