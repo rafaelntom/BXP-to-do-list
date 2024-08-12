@@ -8,9 +8,9 @@ import {
   View,
 } from "react-native";
 import TaskItem from "../components/TaskItem";
-import "../global.css";
 import { addTask, getData, storeData } from "../utils/utils";
 import { useFocusEffect } from "@react-navigation/native";
+import "../global.css";
 
 const HomeScreen = () => {
   const [tasks, setTasks] = useState([]);
@@ -20,7 +20,6 @@ const HomeScreen = () => {
   useEffect(() => {
     const loadTasks = async () => {
       const savedTasks = await getData();
-      console.log(savedTasks);
 
       if (savedTasks) {
         setTasks(savedTasks);

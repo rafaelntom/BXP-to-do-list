@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
 
 const storeData = async (value) => {
   try {
@@ -21,10 +22,9 @@ const getData = async () => {
 const addTask = async (tasks, inputText) => {
   if (inputText.trim() === "") return tasks;
 
-  const newTasks = [
-    { id: (tasks.length + 1).toString(), text: inputText, isDone: false },
-    ...tasks,
-  ];
+  const uniqueId = uuid.v4();
+
+  const newTasks = [{ id: uniqueId, text: inputText, isDone: false }, ...tasks];
 
   await storeData(newTasks);
   return newTasks;
